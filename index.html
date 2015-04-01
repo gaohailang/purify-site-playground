@@ -51,13 +51,13 @@
         }
 
         code, pre {
+            text-align: left;
             background-color: #e2e2e2;
             border-radius:         24px;
             -webkit-border-radius: 24px;
             -moz-border-radius:    24px;
             border: 1px #ccc solid;
             display: block;
-            width: 800px;
             padding: 10px;
             margin: 0 auto;
             margin-bottom: 30px;
@@ -158,6 +158,11 @@
             });
         })();
 
+        // helper to display rule
+        function showRule(str) {
+            $('#generated-code').html(str);
+        }
+
         // Temp Workaround infinite inject adjust css/js
         // Todo: emit which site is now outside, which fetch rewrite rules and show them at pre;
         setTimeout(function() {
@@ -165,11 +170,10 @@
 
             var veinJS = fs.readFileSync('./static/vein.js', 'utf8');
             var rulesJS = fs.readFileSync('./rules/base.js', 'utf8');
-            var cssJS = "vein.inject('h2', {'color' : 'red!important'});";
+            showRule(rulesJS);
             setInterval(function() {
                 Window.eval($iframe, veinJS);
                 Window.eval($iframe, rulesJS);
-                Window.eval($iframe, cssJS);
             }, 100);
         }, 1000);
     </script>
