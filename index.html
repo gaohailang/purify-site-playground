@@ -61,6 +61,8 @@
             padding: 10px;
             margin: 0 auto;
             margin-bottom: 30px;
+
+            overflow: hidden;
         }
     </style>
   </head>
@@ -72,7 +74,7 @@
                     data-device="iphone5" data-orientation="portrait" data-color="black">
                     <div class="device">
                         <div class="screen">
-                            <iframe src="http://www.snaptube.in/_sites-page/index.html" id="showcase">
+                            <iframe src="http://www.snaptube.in/_sites-page/index.html" id="showcase" onLoad="emit('changeUrl');">
                             </iframe>
                         </div>
                         <div class="button">
@@ -163,19 +165,20 @@
             $('#generated-code').html(str);
         }
 
+        var $iframe = document.getElementById('showcase');
+
+        var veinJS = fs.readFileSync('./static/vein.js', 'utf8');
+        var zeptoJS = fs.readFileSync('./static/zepto.min.js', 'utf8');
+        var rulesJS = fs.readFileSync('./rules/base.js', 'utf8');
+
+        function emit() {
+            showRule(rulesJS);
+            Window.eval($iframe, veinJS);
+            Window.eval($iframe, zeptoJS);
+            Window.eval($iframe, rulesJS);
+        }
         // Temp Workaround infinite inject adjust css/js
         // Todo: emit which site is now outside, which fetch rewrite rules and show them at pre;
-        setTimeout(function() {
-            var $iframe = document.getElementById('showcase');
-
-            var veinJS = fs.readFileSync('./static/vein.js', 'utf8');
-            var rulesJS = fs.readFileSync('./rules/base.js', 'utf8');
-            showRule(rulesJS);
-            setInterval(function() {
-                Window.eval($iframe, veinJS);
-                Window.eval($iframe, rulesJS);
-            }, 100);
-        }, 1000);
     </script>
   </body>
 </html>
