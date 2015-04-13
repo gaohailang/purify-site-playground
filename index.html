@@ -167,15 +167,41 @@
 
         var $iframe = document.getElementById('showcase');
 
-        var veinJS = fs.readFileSync('./static/vein.js', 'utf8');
+        Window.on('document-start', function(i) {
+            setTimeout(function() {
+                // debugger;
+                var iframe = $(i.contentDocument);
+                console.log(iframe);
+                $(i.contentDocument).ready(function() {
+                    iframe.html('test');
+                    return;
+                    $(i.contentDocument).find('script').each(function(idx, ii){
+                        var x = $(ii).attr('src');
+                        console.log(x);
+                        if(x && x.indexOf('ad') > -1) {
+                            debugger;
+                            console.log(x);
+                            $(ii).remove();
+                        }
+                    });
+                })
+            });
+            console.log(arguments);
+            console.log('document-start');
+        });
+
+        /*var veinJS = fs.readFileSync('./static/vein.js', 'utf8');
         var zeptoJS = fs.readFileSync('./static/zepto.min.js', 'utf8');
-        var rulesJS = fs.readFileSync('./rules/base.js', 'utf8');
+        var rulesJS = fs.readFileSync('./rules/base.js', 'utf8');*/
+
+        var bundleJS = fs.readFileSync('./bundle.js', 'utf8');
 
         function emit() {
-            showRule(rulesJS);
-            Window.eval($iframe, veinJS);
-            Window.eval($iframe, zeptoJS);
-            Window.eval($iframe, rulesJS);
+            // showRule(rulesJS);
+            Window.eval($iframe, bundleJS);
+            // Window.eval($iframe, veinJS);
+            // Window.eval($iframe, zeptoJS);
+            // Window.eval($iframe, rulesJS);
         }
         // Temp Workaround infinite inject adjust css/js
         // Todo: emit which site is now outside, which fetch rewrite rules and show them at pre;
